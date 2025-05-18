@@ -47,7 +47,7 @@ const SongsTable = () => {
 							<img src={song.imageUrl} alt={song.title} className='size-10 rounded object-cover' />
 						</TableCell>
 						<TableCell className='font-medium'>{song.title}</TableCell>
-						<TableCell>{artists.find((a) => a._id === song.artist)?.name}</TableCell>
+						<TableCell>{song.artist.name}</TableCell>
 						<TableCell>
 							<span className='inline-flex items-center gap-1 text-zinc-400'>
 								<Calendar className='h-4 w-4' />

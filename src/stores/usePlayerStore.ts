@@ -43,7 +43,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
 		if (socket.auth) {
 			socket.emit("update_activity", {
 				userId: socket.auth.userId,
-				activity: `Playing ${song.title} by ${useMusicStore.getState().artists.find((a) => a._id === song.artist)?.name}`,
+				activity: `Playing ${song.title} by ${song.artist.name}`,
 			});
 		}
 		set({
@@ -62,7 +62,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
 		if (socket.auth) {
 			socket.emit("update_activity", {
 				userId: socket.auth.userId,
-				activity: `Playing ${song.title} by ${useMusicStore.getState().artists.find((a) => a._id === song.artist)?.name}`,
+				activity: `Playing ${song.title} by ${song.artist.name}`,
 			});
 		}
 
@@ -85,7 +85,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
 			socket.emit("update_activity", {
 				userId: socket.auth.userId,
 				activity:
-					willStartPlaying && currentSong ? `Playing ${currentSong.title} by ${useMusicStore.getState().artists.find((a) => a._id === currentSong.artist)?.name}` : "Idle",
+					willStartPlaying && currentSong ? `Playing ${currentSong.artist.name}` : "Idle",
 			});
 		}
 
@@ -107,7 +107,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
 			if (socket.auth) {
 				socket.emit("update_activity", {
 					userId: socket.auth.userId,
-					activity: `Playing ${nextSong.title} by ${useMusicStore.getState().artists.find((a) => a._id === nextSong.artist)?.name}`,
+					activity: `Playing ${nextSong.title} by ${nextSong.artist.name}`,
 				});
 			}
 
@@ -142,7 +142,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
 			if (socket.auth) {
 				socket.emit("update_activity", {
 					userId: socket.auth.userId,
-					activity: `Playing ${prevSong.title} by ${useMusicStore.getState().artists.find((a) => a._id === prevSong.artist)?.name}`,
+					activity: `Playing ${prevSong.title} by ${prevSong.artist.name}`,
 				});
 			}
 

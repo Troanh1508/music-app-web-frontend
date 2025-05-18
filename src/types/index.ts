@@ -1,8 +1,8 @@
 export interface Song {
 	_id: string;
 	title: string;
-	artist: string;
-	album: string | null;
+	artist: Artist;
+	album: Album;
 	genre: string | null;
 	imageUrl: string;
 	audioUrl: string;

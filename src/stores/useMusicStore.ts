@@ -9,6 +9,7 @@ interface MusicStore {
 	artists: Artist[];
 	users: User[];
 	favorites: Favorite[];
+	favoriteSongs: Song[];
 	isFavorite: boolean;
 	isLoading: boolean;
 	error: string | null;
@@ -44,6 +45,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 	artists: [],
 	users: [],
 	favorites: [],
+	favoriteSongs: [],
 	isFavorite: false,
 	isLoading: false,
 	error: null,
@@ -249,7 +251,8 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 		set({ isLoading: true, error: null });
 		try {
 			const response = await axiosInstance.get(`/favorites/${user}`);
-			set({ favorites: response.data });
+			set({ favorites: response.data.favorites });
+			set({ favoriteSongs: response.data.favoriteSongs})
 		} catch (error: any) {
 			set({ error: error.response.data.message });
 		} finally {

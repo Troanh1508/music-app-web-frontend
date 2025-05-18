@@ -72,10 +72,10 @@ export const PlaybackControls = () => {
 								</div>
 								<Link
 									to={`/artists/${currentSong.artist}`}
-									key={currentSong.artist}
+									key={currentSong.artist._id}
 								>
 								<div className='text-sm text-zinc-400 truncate hover:underline cursor-pointer'>
-									{useMusicStore.getState().artists.find((a) => a._id === currentSong.artist)?.name}
+									{currentSong.artist.name}
 								</div>
 								</Link>
 								{authUser &&(<HeartButton user={authUser._id} song={currentSong._id}/>)}

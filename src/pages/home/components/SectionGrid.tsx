@@ -3,6 +3,7 @@ import SectionGridSkeleton from "./SectionGridSkeleton";
 import { Button } from "@/components/ui/button";
 import PlayButton from "./PlayButton";
 import { useMusicStore } from "@/stores/useMusicStore";
+import { Link } from "react-router-dom";
 
 type SectionGridProps = {
 	title: string;
@@ -39,7 +40,12 @@ const SectionGrid = ({ songs, title, isLoading }: SectionGridProps) => {
 							<PlayButton song={song} />
 						</div>
 						<h3 className='font-medium mb-2 truncate'>{song.title}</h3>
-						<p className='text-sm text-zinc-400 truncate'>{useMusicStore.getState().artists.find((a) => a._id === song.artist)?.name}</p>
+						<Link
+							to={`/artists/${song.artist._id}`}
+							key={song.artist._id}
+						>
+						<p className='text-sm text-zinc-400 truncate hover:underline cursor-pointer'>{song.artist.name}</p>
+						</Link>
 					</div>
 				))}
 			</div>

@@ -26,11 +26,11 @@ const FeaturedSection = () => {
 						
 						<p className='font-medium truncate'>{song.title}</p>
 						<Link
-							to={`/artists/${song.artist}`}
-							key={song.artist}
+							to={`/artists/${song.artist._id}`}
+							key={song.artist._id}
 						>
 						<div className='text-sm text-zinc-400 truncate hover:underline cursor-pointer'>
-							{useMusicStore.getState().artists.find((a) => a._id === song.artist)?.name}
+							{song.artist.name}
 						</div>
 						</Link>
 						

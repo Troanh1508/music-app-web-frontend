@@ -5,9 +5,10 @@ import { useMusicStore } from "@/stores/useMusicStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { Clock, Pause, Play } from "lucide-react";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const FavoritePage = () => {
-	const { fetchArtists, fetchFavorites, favorites, isLoading } = useMusicStore();
+	const { fetchArtists, fetchFavorites, favorites, favoriteSongs, isLoading } = useMusicStore();
 	const { authUser } = useAuthStore();
 	const { currentSong, isPlaying, playAlbum, togglePlay } = usePlayerStore();
 
@@ -23,28 +24,27 @@ const FavoritePage = () => {
 
 	if (isLoading) return null;
 	console.log("Favorites:", favorites);
-	const likedSongs = Array.isArray(favorites) ? favorites.map((favorite) => favorite.song) : [];
-	console.log("Liked Songs:", likedSongs);
+	console.log("Liked Songs:", favoriteSongs);
 
 	const handlePlayAlbum = () => {
 
-		if (likedSongs.length === 0) return; // No songs to play
+		if (favoriteSongs.length === 0) return; // No songs to play
 
-        const isCurrentQueuePlaying = likedSongs.some((song) => song._id === currentSong?._id);
+        const isCurrentQueuePlaying = favoriteSongs.some((song) => song._id === currentSong?._id);
 
         if (isCurrentQueuePlaying) {
             togglePlay(); // Toggle play/pause if the queue is already playing
         } else {
-            playAlbum(likedSongs, 0); // Start playing the queue from the first song
+            playAlbum(favoriteSongs, 0); // Start playing the queue from the first song
         }
     };
 
-	console.log("Current Playlist:", likedSongs);
+	console.log("Current Playlist:", favoriteSongs);
 
 	const handlePlaySong = (index: number) => {
-		if (likedSongs.length === 0) return;
+		if (favoriteSongs.length === 0) return;
 
-		playAlbum(likedSongs, index);
+		playAlbum(favoriteSongs, index);
 	};
 
 	return (
@@ -73,7 +73,7 @@ const FavoritePage = () => {
 								<h1 className='text-7xl font-bold my-4'>Liked Songs</h1>
 								<div className='flex items-center gap-2 text-sm text-zinc-100'>
 									<span className='font-medium text-white'>{authUser?.username}</span>
-									<span>• {likedSongs.length} songs</span>
+									<span>• {favoriteSongs.length} songs</span>
 								</div>
 							</div>
 						</div>
@@ -86,7 +86,7 @@ const FavoritePage = () => {
 								className='w-14 h-14 rounded-full bg-green-500 hover:bg-green-400 
                 hover:scale-105 transition-all'
 							>
-								{isPlaying && likedSongs.some((song) => song._id === currentSong?._id) ? (
+								{isPlaying && favoriteSongs.some((song) => song._id === currentSong?._id) ? (
 									<Pause className='h-7 w-7 text-black' />
 								) : (
 									<Play className='h-7 w-7 text-black' />
@@ -113,17 +113,17 @@ const FavoritePage = () => {
 
 							<div className='px-6'>
 								<div className='space-y-2 py-4'>
-									{likedSongs.map((song, index) => {
+									{favoriteSongs.map((song, index) => {
 										const isCurrentSong = currentSong?._id === song._id;
 										return (
 											<div
 												key={song._id || index}
-												onClick={() => handlePlaySong(index)}
 												className={`grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-4 py-2 text-sm 
                       text-zinc-400 hover:bg-white/5 rounded-md group cursor-pointer
                       `}
 											>
-												<div className='flex items-center justify-center'>
+												<div className='flex items-center justify-center'
+												onClick={() => handlePlaySong(index)}>
 													{isCurrentSong && isPlaying ? (
 														<div className='size-4 text-green-500'>♫</div>
 													) : (
@@ -141,8 +141,14 @@ const FavoritePage = () => {
 														<div className={`font-medium text-white`}>{song.title}</div>
 													</div>
 												</div>
-												<div className='flex items-center'>
-													{useMusicStore.getState().artists.find((a) => a._id === song.artist)?.name} </div>
+												<Link 
+													to={`/artists/${song.artist._id}`}
+													key={song.artist._id}
+													className='flex items-center'>	
+												<div className="hover:underline cursor-pointer">
+													{song.artist.name} 
+												</div>
+												</Link>
 												<div className='flex items-center'>{song.duration}</div>
 											</div>
 										);
