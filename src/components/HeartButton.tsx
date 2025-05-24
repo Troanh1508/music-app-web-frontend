@@ -2,7 +2,6 @@ import { useMusicStore } from "@/stores/useMusicStore";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useAuthStore } from "@/stores/useAuthStore";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
 
 interface HeartButtonProps {
     user: string;
@@ -10,7 +9,7 @@ interface HeartButtonProps {
 }
 
 export const HeartButton: React.FC<HeartButtonProps> = ({ user, song }) => {
-    const { toggleFavorite, fetchFavorites, favoriteSongs } = useMusicStore();
+    const { toggleFavorite, favoriteSongs } = useMusicStore();
     const { authUser } = useAuthStore();
 
     // Check if this song is in the user's favorites

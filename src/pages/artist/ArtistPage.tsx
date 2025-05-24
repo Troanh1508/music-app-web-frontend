@@ -8,7 +8,7 @@ import { Link, useParams } from "react-router-dom";
 
 const ArtistPage = () => {
 	const { artistId } = useParams();
-	const { fetchAlbumById, currentAlbum, songsByArtistId, isLoading, currentArtist, fetchArtistById, fetchSongsByArtistId } = useMusicStore();
+	const { songsByArtistId, isLoading, currentArtist, fetchArtistById, fetchSongsByArtistId } = useMusicStore();
 	const { currentSong, isPlaying, playAlbum, togglePlay } = usePlayerStore();
 
 	useEffect(() => {
