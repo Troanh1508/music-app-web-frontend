@@ -8,33 +8,37 @@ import { Link, useParams } from "react-router-dom";
 
 const AlbumPage = () => {
 	const { albumId } = useParams();
-	const { fetchAlbumById, currentAlbum, isLoading } = useMusicStore();
+	const { fetchAlbumById, fetchSongsByAlbumId, songsByAlbumId, currentAlbum, isLoading } = useMusicStore();
 	const { currentSong, isPlaying, playAlbum, togglePlay } = usePlayerStore();
 
 	useEffect(() => {
-		if (albumId) fetchAlbumById(albumId);
-	}, [fetchAlbumById, albumId]);
+		if (albumId) {
+			fetchAlbumById(albumId);
+			fetchSongsByAlbumId(albumId);
+		}
+
+	}, [fetchAlbumById, fetchSongsByAlbumId, albumId]);
 
 	if (isLoading) return null;
 
 	const handlePlayAlbum = () => {
-		if (!currentAlbum) return;
+		if (!songsByAlbumId) return;
 
-		const isCurrentAlbumPlaying = currentAlbum?.songs.some((song) => song._id === currentSong?._id);
+		const isCurrentAlbumPlaying = songsByAlbumId?.some((song) => song._id === currentSong?._id);
 		if (isCurrentAlbumPlaying) togglePlay();
 		else {
 			// start playing the album from the beginning
-			playAlbum(currentAlbum?.songs, 0);
+			playAlbum(songsByAlbumId, 0);
 		}
 	};
 
 	console.log("Current Album:", currentAlbum);
-	console.log("Songs:", currentAlbum?.songs);
+	console.log("Songs:", songsByAlbumId);
 
 	const handlePlaySong = (index: number) => {
-		if (!currentAlbum) return;
+		if (!songsByAlbumId) return;
 
-		playAlbum(currentAlbum?.songs, index);
+		playAlbum(songsByAlbumId, index);
 	};
 
 	return (
@@ -78,7 +82,7 @@ const AlbumPage = () => {
 								className='w-14 h-14 rounded-full bg-green-500 hover:bg-green-400 
                 hover:scale-105 transition-all'
 							>
-								{isPlaying && currentAlbum?.songs.some((song) => song._id === currentSong?._id) ? (
+								{isPlaying && songsByAlbumId?.some((song) => song._id === currentSong?._id) ? (
 									<Pause className='h-7 w-7 text-black' />
 								) : (
 									<Play className='h-7 w-7 text-black' />
@@ -104,7 +108,7 @@ const AlbumPage = () => {
 
 							<div className='px-6'>
 								<div className='space-y-2 py-4'>
-									{currentAlbum?.songs.map((song, index) => {
+									{songsByAlbumId.map((song, index) => {
 										const isCurrentSong = currentSong?._id === song._id;
 										return (
 											<div

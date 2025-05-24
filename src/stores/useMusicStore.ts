@@ -1,14 +1,15 @@
 import { axiosInstance } from "@/lib/axios";
-import { Album, Artist, Favorite, Song, Stats, User } from "@/types";
+import { Album, Artist, Song, Stats, User } from "@/types";
 import toast from "react-hot-toast";
 import { create } from "zustand";
 
 interface MusicStore {
 	songs: Song[];
+	songsByAlbumId: Song[];
+	songsByArtistId: Song[];
 	albums: Album[];
 	artists: Artist[];
 	users: User[];
-	// favorites: Favorite[];
 	favoriteSongs: Song[];
 	isFavorite: boolean;
 	isLoading: boolean;
@@ -29,6 +30,8 @@ interface MusicStore {
 	fetchTrendingSongs: () => Promise<void>;
 	fetchStats: () => Promise<void>;
 	fetchSongs: () => Promise<void>;
+	fetchSongsByAlbumId: (albumId: string) => Promise<void>;
+	fetchSongsByArtistId: (artistId: string) => Promise<void>;
 	fetchUsers: () => Promise<void>;
 	fetchFavorites: (user: string) => Promise<void>;
 	deleteSong: (id: string) => Promise<void>;
@@ -42,9 +45,10 @@ interface MusicStore {
 export const useMusicStore = create<MusicStore>((set, get) => ({
 	albums: [],
 	songs: [],
+	songsByAlbumId: [],
+	songsByArtistId: [],
 	artists: [],
 	users: [],
-	// favorites: [],
 	favoriteSongs: [],
 	isFavorite: false,
 	isLoading: false,
@@ -129,6 +133,30 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 		try {
 			const response = await axiosInstance.get("/songs");
 			set({ songs: response.data });
+		} catch (error: any) {
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	fetchSongsByAlbumId: async (albumId) => {
+		set({ isLoading: true, error: null });
+		try {
+			const response = await axiosInstance.get(`/songs/album/${albumId}`);
+			set({ songsByAlbumId: response.data });
+		} catch (error: any) {
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	fetchSongsByArtistId: async (artistId) => {
+		set({ isLoading: true, error: null });
+		try {
+			const response = await axiosInstance.get(`/songs/artist/${artistId}`);
+			set({ songsByArtistId: response.data });
 		} catch (error: any) {
 			set({ error: error.message });
 		} finally {
@@ -274,36 +302,6 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 			set({ isLoading: false });
 		}
 	},
-
-	// toggleFavorite: async (user, song) => {
-	// 	set({ isLoading: true, error: null });
-	// 	try {
-	// 		const isFavorite = get().favorites.some((favorite) => favorite.song._id === song);
-
-	// 		if (isFavorite) {
-	// 			// Remove from favorites
-	// 			await axiosInstance.delete(`/favorites/${user}/${song}`);
-	// 			set((state) => ({
-	// 				favorites: state.favorites.filter((favorite) => favorite.song._id !== song),
-	// 				isFavorite: false,
-	// 			}));
-	// 			toast.success("Removed from favorites");
-	// 		} else {
-	// 			// Add to favorites
-	// 			const response = await axiosInstance.post(`/favorites`, { user, song });
-	// 			set((state) => ({
-	// 				favorites: [...state.favorites, response.data],
-	// 				isFavorite: true,
-	// 			}));
-	// 			toast.success("Added to favorites");
-	// 			get().fetchFavorites(user); // Refresh favorites list
-	// 		}
-	// 	} catch (error: any) {
-	// 		toast.error("Failed to toggle favorite: " + (error.response?.data?.message || error.message));
-	// 	} finally {
-	// 		set({ isLoading: false });
-	// 	}
-	// }
 
 	toggleFavorite: async (user, song) => {
     set({ isLoading: true, error: null });

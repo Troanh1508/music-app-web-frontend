@@ -49,10 +49,3 @@ export interface User {
 	createdAt: string;
 	updatedAt: string;
 }
-
-export interface Favorite {
-	_id: string;
-	song: Song;
-	user: User;
-	createdAt: string;
-}

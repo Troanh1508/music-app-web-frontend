@@ -8,14 +8,20 @@ import { Link, useParams } from "react-router-dom";
 
 const ArtistPage = () => {
 	const { artistId } = useParams();
-	const { fetchAlbumById, currentAlbum, isLoading, currentArtist, fetchArtistById } = useMusicStore();
+	const { fetchAlbumById, currentAlbum, songsByArtistId, isLoading, currentArtist, fetchArtistById, fetchSongsByArtistId } = useMusicStore();
 	const { currentSong, isPlaying, playAlbum, togglePlay } = usePlayerStore();
 
 	useEffect(() => {
-		if (artistId) fetchArtistById(artistId);
-	}, [fetchArtistById, artistId]);
+		if (artistId){
+			fetchArtistById(artistId);
+			fetchSongsByArtistId(artistId);
+		}
+	}, [fetchArtistById, artistId, fetchSongsByArtistId]);
 
 	if (isLoading) return null;
+
+	const currentArtistAlbums = currentArtist?.albums || [];
+	const currentArtistSongs = songsByArtistId || [];
 
 	const handlePlayAlbum = () => {
 		if (!currentArtistSongs) return;
@@ -33,8 +39,7 @@ const ArtistPage = () => {
 
 		playAlbum(currentArtistSongs, index);
 	};
-	const currentArtistAlbums = currentArtist?.albums || [];
-	const currentArtistSongs = currentArtist?.songs || [];
+	
 
 	return (
 
@@ -164,7 +169,7 @@ const ArtistPage = () => {
 
 													<div>
 														<div className={`font-medium text-white`}>{song.title}</div>
-														<div>{useMusicStore.getState().artists.find((a) => a._id === song.artist)?.name}</div>
+														<div>{song.artist.name}</div>
 													</div>
 												</div>
 												<div className='flex items-center'>{song.duration}</div>
