@@ -8,7 +8,7 @@ interface MusicStore {
 	albums: Album[];
 	artists: Artist[];
 	users: User[];
-	favorites: Favorite[];
+	// favorites: Favorite[];
 	favoriteSongs: Song[];
 	isFavorite: boolean;
 	isLoading: boolean;
@@ -44,7 +44,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 	songs: [],
 	artists: [],
 	users: [],
-	favorites: [],
+	// favorites: [],
 	favoriteSongs: [],
 	isFavorite: false,
 	isLoading: false,
@@ -251,7 +251,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 		set({ isLoading: true, error: null });
 		try {
 			const response = await axiosInstance.get(`/favorites/${user}`);
-			set({ favorites: response.data.favorites });
+			// set({ favorites: response.data.favorites });
 			set({ favoriteSongs: response.data.favoriteSongs})
 		} catch (error: any) {
 			set({ error: error.response.data.message });
@@ -264,9 +264,9 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 		set({ isLoading: true, error: null });
 		try {
 			await axiosInstance.delete(`/favorites/${user}/${song}`);
-			set((state) => ({
-				favorites: state.favorites.filter((favorite) => favorite.song._id !== song),
-			}));
+			// set((state) => ({
+			// 	favorites: state.favorites.filter((favorite) => favorite.song._id !== song),
+			// }));
 			toast.success("Favorite deleted successfully");
 		} catch (error: any) {
 			toast.error("Failed to delete favorite: " + error.message);
@@ -275,33 +275,54 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 		}
 	},
 
-	toggleFavorite: async (user, song) => {
-		set({ isLoading: true, error: null });
-		try {
-			const isFavorite = get().favorites.some((favorite) => favorite.song._id === song);
+	// toggleFavorite: async (user, song) => {
+	// 	set({ isLoading: true, error: null });
+	// 	try {
+	// 		const isFavorite = get().favorites.some((favorite) => favorite.song._id === song);
 
-			if (isFavorite) {
-				// Remove from favorites
-				await axiosInstance.delete(`/favorites/${user}/${song}`);
-				set((state) => ({
-					favorites: state.favorites.filter((favorite) => favorite.song._id !== song),
-					isFavorite: false,
-				}));
-				toast.success("Removed from favorites");
-			} else {
-				// Add to favorites
-				const response = await axiosInstance.post(`/favorites`, { user, song });
-				set((state) => ({
-					favorites: [...state.favorites, response.data],
-					isFavorite: true,
-				}));
-				toast.success("Added to favorites");
-				get().fetchFavorites(user); // Refresh favorites list
-			}
-		} catch (error: any) {
-			toast.error("Failed to toggle favorite: " + (error.response?.data?.message || error.message));
-		} finally {
-			set({ isLoading: false });
-		}
-	}
+	// 		if (isFavorite) {
+	// 			// Remove from favorites
+	// 			await axiosInstance.delete(`/favorites/${user}/${song}`);
+	// 			set((state) => ({
+	// 				favorites: state.favorites.filter((favorite) => favorite.song._id !== song),
+	// 				isFavorite: false,
+	// 			}));
+	// 			toast.success("Removed from favorites");
+	// 		} else {
+	// 			// Add to favorites
+	// 			const response = await axiosInstance.post(`/favorites`, { user, song });
+	// 			set((state) => ({
+	// 				favorites: [...state.favorites, response.data],
+	// 				isFavorite: true,
+	// 			}));
+	// 			toast.success("Added to favorites");
+	// 			get().fetchFavorites(user); // Refresh favorites list
+	// 		}
+	// 	} catch (error: any) {
+	// 		toast.error("Failed to toggle favorite: " + (error.response?.data?.message || error.message));
+	// 	} finally {
+	// 		set({ isLoading: false });
+	// 	}
+	// }
+
+	toggleFavorite: async (user, song) => {
+    set({ isLoading: true, error: null });
+    try {
+        const response = await axiosInstance.post(`/favorites`, { user, song });
+        const { favorited } = response.data;
+
+        if (favorited) {
+            set({ isFavorite: true });
+            toast.success("Added to favorites");
+        } else {
+            set({ isFavorite: false });
+            toast.success("Removed from favorites");
+        }
+        get().fetchFavorites(user); // Refresh favorites list
+    } catch (error: any) {
+        toast.error("Failed to toggle favorite: " + (error.response?.data?.message || error.message));
+    } finally {
+        set({ isLoading: false });
+    }
+},
 }));

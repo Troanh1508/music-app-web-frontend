@@ -10,23 +10,26 @@ interface HeartButtonProps {
 }
 
 export const HeartButton: React.FC<HeartButtonProps> = ({ user, song }) => {
-    const { favorites, toggleFavorite, fetchFavorites, isFavorite } = useMusicStore();
+    const { toggleFavorite, fetchFavorites, favoriteSongs } = useMusicStore();
     const { authUser } = useAuthStore();
 
-
+    // Check if this song is in the user's favorites
+    const isFavorited = favoriteSongs.some(
+        (fav: any) => fav._id === song || fav === song
+    );
 
     const handleToggleFavorite = () => {
-        if (!authUser) return toast.error("Please sign in to add songs to favorites"); // Ensure user is authenticated
-        toggleFavorite(user, song); // Call the toggleFavorite function
+        if (!authUser) return toast.error("Please sign in to add songs to favorites"); 
+        toggleFavorite(user, song); 
     };
 
     return (
         <button
             onClick={handleToggleFavorite}
             className="text-green-500 hover:text-green-400 transition-all"
-            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+            aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
         >
-            {isFavorite ? (
+            {isFavorited ? (
                 <FaHeart className="h-6 w-6" /> // Filled heart for favorite
             ) : (
                 <FaRegHeart className="h-6 w-6" /> // Outline heart for non-favorite

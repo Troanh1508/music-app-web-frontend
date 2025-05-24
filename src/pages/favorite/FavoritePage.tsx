@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const FavoritePage = () => {
-	const { fetchArtists, fetchFavorites, favorites, favoriteSongs, isLoading } = useMusicStore();
+	const { fetchArtists, fetchFavorites, favoriteSongs, isLoading } = useMusicStore();
 	const { authUser } = useAuthStore();
 	const { currentSong, isPlaying, playAlbum, togglePlay } = usePlayerStore();
 
@@ -23,7 +23,6 @@ const FavoritePage = () => {
 	
 
 	if (isLoading) return null;
-	console.log("Favorites:", favorites);
 	console.log("Liked Songs:", favoriteSongs);
 
 	const handlePlayAlbum = () => {

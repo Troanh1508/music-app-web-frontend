@@ -29,7 +29,7 @@ const AlbumPage = () => {
 	};
 
 	console.log("Current Album:", currentAlbum);
-console.log("Songs:", currentAlbum?.songs);
+	console.log("Songs:", currentAlbum?.songs);
 
 	const handlePlaySong = (index: number) => {
 		if (!currentAlbum) return;
