@@ -280,7 +280,7 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 		try {
 			const response = await axiosInstance.get(`/favorites/${user}`);
 			// set({ favorites: response.data.favorites });
-			set({ favoriteSongs: response.data.favoriteSongs})
+			set({ favoriteSongs: response.data})
 		} catch (error: any) {
 			set({ error: error.response.data.message });
 		} finally {
