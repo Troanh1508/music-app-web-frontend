@@ -46,7 +46,10 @@ const ArtistsTable = () => {
 								<Button
 									variant='ghost'
 									size='sm'
-									onClick={() => deleteArtist(artist._id)}
+									onClick={() => {
+										if (window.confirm(`Are you sure you want to delete "${artist.name}"?\nThis will also delete all their albums and songs.`)) {
+											deleteArtist(artist._id);}
+									}}
 									className='text-red-400 hover:text-red-300 hover:bg-red-400/10'
 								>
 									<Trash2 className='h-4 w-4' />

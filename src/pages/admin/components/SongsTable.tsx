@@ -8,7 +8,7 @@ const SongsTable = () => {
 	const { artists, songs, isLoading, error, deleteSong, fetchSongs } = useMusicStore();
 
 	useEffect(() => {
-			fetchSongs();
+		fetchSongs();
 	}, [fetchSongs]);
 
 
@@ -61,7 +61,11 @@ const SongsTable = () => {
 									variant={"ghost"}
 									size={"sm"}
 									className='text-red-400 hover:text-red-300 hover:bg-red-400/10'
-									onClick={() => deleteSong(song._id)}
+									onClick={() => {
+										if (window.confirm(`Are you sure you want to delete "${song.title}"?`)) {
+											deleteSong(song._id);
+										}
+									}}
 								>
 									<Trash2 className='size-4' />
 								</Button>
