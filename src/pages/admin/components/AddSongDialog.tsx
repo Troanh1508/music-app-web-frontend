@@ -29,8 +29,8 @@ const AddSongDialog = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-			fetchArtists();
-		}, [fetchArtists]);
+		fetchArtists();
+	}, [fetchArtists]);
 
 	const [newSong, setNewSong] = useState<NewSong>({
 		title: "",
@@ -39,7 +39,7 @@ const AddSongDialog = () => {
 		genre: "",
 	});
 
-	
+
 	const filteredAlbums = albums.filter(album => album.artist._id === newSong.artist);
 
 
@@ -119,7 +119,16 @@ const AddSongDialog = () => {
 						accept='audio/*'
 						ref={audioInputRef}
 						hidden
-						onChange={(e) => setFiles((prev) => ({ ...prev, audio: e.target.files![0] }))}
+						onChange={(e) => {
+							const file = e.target.files?.[0];
+							if (file) {
+								if (!file.type.startsWith('audio/')) {
+									toast.error('Please select a valid audio file.');
+									return;
+								}
+								setFiles((prev) => ({ ...prev, audio: file }));
+							}
+						}}
 					/>
 
 					<input
@@ -127,7 +136,16 @@ const AddSongDialog = () => {
 						ref={imageInputRef}
 						className='hidden'
 						accept='image/*'
-						onChange={(e) => setFiles((prev) => ({ ...prev, image: e.target.files![0] }))}
+						onChange={(e) => {
+							const file = e.target.files?.[0];
+							if (file) {
+								if (!file.type.startsWith('image/')) {
+									toast.error('Please select a valid image file.');
+									return;
+								}
+								setFiles((prev) => ({ ...prev, image: file }));
+							}
+						}}
 					/>
 
 					{/* image upload area */}

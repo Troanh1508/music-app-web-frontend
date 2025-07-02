@@ -28,6 +28,10 @@ const AddArtistDialog = () => {
 	const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (file) {
+			if (!file.type.startsWith('image/')) {
+                toast.error('Please select a valid image file.');
+                return;
+            }
 			setImageFile(file);
 		}
 	};
