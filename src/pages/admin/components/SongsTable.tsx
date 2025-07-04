@@ -5,7 +5,7 @@ import { Calendar, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 
 const SongsTable = () => {
-	const { artists, songs, isLoading, error, deleteSong, fetchSongs } = useMusicStore();
+	const { songs, isLoading, error, deleteSong, fetchSongs } = useMusicStore();
 
 	useEffect(() => {
 		fetchSongs();
