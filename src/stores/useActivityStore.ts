@@ -19,7 +19,8 @@ interface ActivityStore {
 	setSelectedUser: (user: User | null) => void;
 }
 
-const baseURL = import.meta.env.MODE === "development" ? "http://localhost:5000" : "/";
+// const baseURL = import.meta.env.MODE === "development" ? "http://localhost:5000" : "/";
+const baseURL = import.meta.env.ACTIVITY_SOCKET_URL || "http://localhost:5000";
 
 const socket = io(baseURL, {
 	autoConnect: false, // only connect if user is authenticated

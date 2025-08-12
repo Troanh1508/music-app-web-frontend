@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { Song } from "@/types";
 import { useActivityStore } from "./useActivityStore";
-import { useMusicStore } from "./useMusicStore";
 
 interface PlayerStore {
 	currentSong: Song | null;
