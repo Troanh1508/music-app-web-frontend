@@ -34,6 +34,7 @@ interface MusicStore {
 	fetchSongsByArtistId: (artistId: string) => Promise<void>;
 	fetchUsers: () => Promise<void>;
 	fetchFavorites: (user: string) => Promise<void>;
+	clearFavorites: () => void;
 	deleteSong: (id: string) => Promise<void>;
 	deleteAlbum: (id: string) => Promise<void>;
 	deleteArtist: (id: string) => Promise<void>;
@@ -286,6 +287,10 @@ export const useMusicStore = create<MusicStore>((set, get) => ({
 		} finally {
 			set({ isLoading: false });
 		}
+	},
+
+	clearFavorites: () => {
+		set({ favoriteSongs: [] });
 	},
 
 	deleteFavorite: async (user, song) => {

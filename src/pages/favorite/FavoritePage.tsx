@@ -3,12 +3,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useMusicStore } from "@/stores/useMusicStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";
+import { clear } from "console";
 import { Clock, Pause, Play } from "lucide-react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const FavoritePage = () => {
-	const { fetchArtists, fetchFavorites, favoriteSongs, isLoading } = useMusicStore();
+	const { fetchArtists, fetchFavorites, clearFavorites, favoriteSongs, isLoading } = useMusicStore();
 	const { authUser } = useAuthStore();
 	const { currentSong, isPlaying, playAlbum, togglePlay } = usePlayerStore();
 
@@ -18,8 +19,9 @@ const FavoritePage = () => {
 	}, [ fetchArtists]);
 
 	useEffect(() => {
+		clearFavorites();
 			fetchFavorites(authUser._id);
-		}, [fetchFavorites, authUser._id]);
+		}, [fetchFavorites, authUser, clearFavorites]);
 	
 
 	if (isLoading) return null;
