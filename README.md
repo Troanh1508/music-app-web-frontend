@@ -1,4 +1,4 @@
-# 🎵 Online Music App — Mobile
+# 🎵 Online Music App — Web
 Web frontend part of online music streaming service built with ReactJS.
 
 <img src="readme/desktop.png"/>
