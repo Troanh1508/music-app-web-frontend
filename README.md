@@ -9,7 +9,7 @@ Web frontend part of online music streaming service built with ReactJS.
 npm install
 ```
 
-## Run Android
+## Run
 
 ```bash
 npm run dev
